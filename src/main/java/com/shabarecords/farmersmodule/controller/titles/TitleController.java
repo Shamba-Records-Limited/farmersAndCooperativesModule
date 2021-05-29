@@ -35,7 +35,7 @@ public class TitleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Title>> addTitle(@RequestParam() int page, @RequestParam() int size) {
+    public ResponseEntity<List<Title>> addTitles(@RequestParam() int page, @RequestParam() int size) {
 
         return new ResponseEntity<>(titleService.getTitles(PageRequest.of(page, size)), HttpStatus.OK);
     }

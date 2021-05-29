@@ -18,17 +18,21 @@ public class FarmerContact {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private BigDecimal code;
+    @Column(name = "code",nullable = false)
+    private int code;
 
     @ManyToOne
     private Farmer farmer;
 
+    @Column(name = "subCountyCode",length = 50,nullable = false)
     private String value;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "type",length = 10,nullable = false)
     private ContactType type;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "priority",length = 10,nullable = false)
     private ContactPriority  priority= ContactPriority.SECONDARY;
 
 }

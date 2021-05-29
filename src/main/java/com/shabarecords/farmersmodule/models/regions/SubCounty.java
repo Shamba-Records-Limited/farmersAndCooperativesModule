@@ -2,6 +2,7 @@ package com.shabarecords.farmersmodule.models.regions;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -15,10 +16,12 @@ import javax.persistence.ManyToOne;
 @Data
 public class SubCounty {
     @Id
+    @Column(name = "subCountyCode",length = 10,unique = true,nullable = false)
     private String subCountyCode;
 
     @ManyToOne
     private County county;
 
+    @Column(name = "name",length = 50,nullable = false)
     private String name;
 }

@@ -17,11 +17,16 @@ public class ContactPerson {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", unique = true,nullable = false)
     private Integer id;
 
+    @Column(name = "firstName",length = 50,nullable = false)
     private String firstName;
+
+    @Column(name = "middleName",length = 50)
     private String middleName;
 
+    @Column(name = "lastName",length = 50,nullable = false)
     private String lastName;
 
     @ManyToOne
@@ -30,7 +35,7 @@ public class ContactPerson {
     @ManyToOne
     private Cooperative cooperative;
 
-    private LocalDate effectiveFrom;
+    private LocalDate effectiveFrom = LocalDate.now();
     private LocalDate effectiveTo;
 
 

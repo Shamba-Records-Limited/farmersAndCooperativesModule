@@ -1,5 +1,6 @@
 package com.shabarecords.farmersmodule.models.cooperative;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.shabarecords.farmersmodule.models.farmer.Farmer;
 import lombok.Data;
 
@@ -17,6 +18,7 @@ public class CooperativeFarmers {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
+    @Column(name = "id",unique = true,nullable = false)
     private Long id;
 
     @ManyToOne
@@ -25,7 +27,11 @@ public class CooperativeFarmers {
     @ManyToOne
     private Cooperative cooperative;
 
-    private boolean active;
-    private LocalDate effectiveFrom;
+    @JsonProperty(access= JsonProperty.Access.READ_ONLY)
+    private boolean active = true;
+
+
+    private LocalDate effectiveFrom = LocalDate.now();
+
     private LocalDate effectiveTo;
 }

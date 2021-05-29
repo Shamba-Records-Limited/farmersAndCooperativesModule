@@ -2,9 +2,9 @@ package com.shabarecords.farmersmodule.models.regions;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 /**
  * @author : Odinga David
@@ -15,8 +15,11 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Village {
     @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name="id", nullable=false, unique=true)
     private Integer id;
 
+    @Column(name="name", nullable=false, length=50)
     private String name;
 
     @ManyToOne
