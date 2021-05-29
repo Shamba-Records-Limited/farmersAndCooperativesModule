@@ -1,6 +1,6 @@
 package com.shabarecords.farmersmodule.models.farmer;
 
-import com.shabarecords.farmersmodule.enums.farmer.Gender;
+import com.shabarecords.farmersmodule.utils.enums.Gender;
 import com.shabarecords.farmersmodule.models.regions.Village;
 import lombok.Data;
 

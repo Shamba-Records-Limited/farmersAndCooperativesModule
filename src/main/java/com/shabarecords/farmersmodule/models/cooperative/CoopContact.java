@@ -1,12 +1,10 @@
 package com.shabarecords.farmersmodule.models.cooperative;
 
-import com.shabarecords.farmersmodule.enums.farmer.ContactPriority;
-import com.shabarecords.farmersmodule.enums.farmer.ContactType;
-import com.shabarecords.farmersmodule.models.farmer.Farmer;
+import com.shabarecords.farmersmodule.utils.enums.ContactPriority;
+import com.shabarecords.farmersmodule.utils.enums.ContactType;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 /**
  * @author : Odinga David
