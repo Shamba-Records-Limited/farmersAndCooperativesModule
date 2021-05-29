@@ -1,6 +1,7 @@
 package com.shabarecords.farmersmodule.services;
 
 import com.shabarecords.farmersmodule.models.farmer.FarmerContact;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -13,5 +14,5 @@ public interface FarmerContactService {
 
     List<FarmerContact> getFarmerContact(String farmer_id);
 
-    FarmerContact addContact(FarmerContact contact);
+    ResponseEntity addContact(FarmerContact contact);
 }

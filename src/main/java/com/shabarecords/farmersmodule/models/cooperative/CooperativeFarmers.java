@@ -1,7 +1,9 @@
 package com.shabarecords.farmersmodule.models.cooperative;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.shabarecords.farmersmodule.models.farmer.Farmer;
+import com.sun.istack.NotNull;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -22,12 +24,16 @@ public class CooperativeFarmers {
     private Long id;
 
     @ManyToOne
+    @NotNull
     private Farmer farmer;
 
     @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @NotNull
     private Cooperative cooperative;
 
     @JsonProperty(access= JsonProperty.Access.READ_ONLY)
+    @JsonIgnore
     private boolean active = true;
 
 

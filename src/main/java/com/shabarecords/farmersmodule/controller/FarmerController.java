@@ -53,15 +53,13 @@ public class FarmerController {
 
 
     @PostMapping("/{farmer_id}/add-contact")
-    public ResponseEntity<FarmerContact> addFarmerContact(
+    public ResponseEntity addFarmerContact(
             @RequestBody FarmerContact contact,
             @PathVariable String farmer_id){
 
         contact.setFarmer(farmerService.getFarmer(farmer_id));
 
-        contact = contactService.addContact(contact);
-
-        return new ResponseEntity<>(contact, HttpStatus.OK);
+        return contactService.addContact(contact);
     }
 
 

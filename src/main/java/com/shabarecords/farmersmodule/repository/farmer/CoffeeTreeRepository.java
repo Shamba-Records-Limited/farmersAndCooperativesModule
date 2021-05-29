@@ -13,5 +13,9 @@ public interface CoffeeTreeRepository extends JpaRepository<CoffeeTreesRecord, I
 
     List<CoffeeTreesRecord> findAllByFarm_Id(Integer farm_id);
 
-    CoffeeTreesRecord findFirstByCurrentRecord(boolean currentRecord);
+    CoffeeTreesRecord findFirstByCurrentRecordAndFarm_Id(boolean currentRecord, Integer farm_id);
+
+    List<CoffeeTreesRecord> findAllByFarmFarmerGrowerId(String farm_farmer_growerId);
+
+
 }

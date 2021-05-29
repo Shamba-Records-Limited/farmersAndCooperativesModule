@@ -1,5 +1,7 @@
 package com.shabarecords.farmersmodule.models.cooperative;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.shabarecords.farmersmodule.models.title.Title;
 import lombok.Data;
 
@@ -32,10 +34,17 @@ public class ContactPerson {
     @ManyToOne
     private Title title;
 
-    @ManyToOne
+    @JsonIgnore
+    private boolean active=true;
+
+    @ManyToOne()
+    @JsonIgnore
     private Cooperative cooperative;
 
+    @JsonProperty(access= JsonProperty.Access.READ_ONLY)
     private LocalDate effectiveFrom = LocalDate.now();
+
+    @JsonProperty(access= JsonProperty.Access.READ_ONLY)
     private LocalDate effectiveTo;
 
 

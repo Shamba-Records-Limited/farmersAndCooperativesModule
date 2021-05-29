@@ -1,5 +1,6 @@
 package com.shabarecords.farmersmodule.models.cooperative;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shabarecords.farmersmodule.utils.enums.ContactPriority;
 import com.shabarecords.farmersmodule.utils.enums.ContactType;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class CoopContact {
     private Integer code;
 
     @ManyToOne
+    @JsonIgnore
     private Cooperative cooperative;
 
     @Column(name = "value",length = 30,nullable = false)
@@ -33,5 +35,6 @@ public class CoopContact {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "priority",length = 10,nullable = false)
+    @JsonIgnore
     private ContactPriority priority= ContactPriority.SECONDARY;
 }

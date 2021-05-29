@@ -1,6 +1,7 @@
 package com.shabarecords.farmersmodule.services;
 
 import com.shabarecords.farmersmodule.models.cooperative.CoopContact;
+import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -11,11 +12,11 @@ import java.util.List;
  */
 public interface CoopContactService {
 
-    CoopContact addOrUpdateCooperative(CoopContact contact);
+    ResponseEntity addOrUpdateCooperative(CoopContact contact);
 
     List<CoopContact> addContacts(List<CoopContact> contacts);
 
-    CoopContact getContact(BigDecimal contact_id);
+    ResponseEntity getContact(Integer contact_id);
 
     List<CoopContact> getCoopContact(String coop_code);
 }

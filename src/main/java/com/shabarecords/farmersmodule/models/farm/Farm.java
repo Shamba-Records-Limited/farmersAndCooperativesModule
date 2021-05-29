@@ -1,5 +1,6 @@
 package com.shabarecords.farmersmodule.models.farm;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.shabarecords.farmersmodule.models.farmer.Farmer;
 import com.shabarecords.farmersmodule.models.regions.Village;
@@ -22,6 +23,7 @@ public class Farm {
     private Integer id;
 
     @ManyToOne
+    @JsonIgnore
     private Farmer farmer;
 
     @Column(name = "size",length = 150,nullable = false)

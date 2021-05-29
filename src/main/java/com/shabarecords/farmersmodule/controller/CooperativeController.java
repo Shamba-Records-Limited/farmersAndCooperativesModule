@@ -48,16 +48,16 @@ public class CooperativeController {
     }
 
     @PostMapping("/{code}/contact")
-    public ResponseEntity<CoopContact> addContact(
+    public ResponseEntity addContact(
             @RequestBody CoopContact contact,
             @PathVariable String code) {
 
 
         contact.setCooperative(coopService.getCooperative(code));
 
-        contact = contactService.addOrUpdateCooperative(contact);
+        return contactService.addOrUpdateCooperative(contact);
 
-        return new ResponseEntity<>(contact, HttpStatus.OK);
+
 
     }
 

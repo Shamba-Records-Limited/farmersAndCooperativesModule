@@ -1,5 +1,6 @@
 package com.shabarecords.farmersmodule.models.regions;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -20,6 +21,7 @@ public class SubCounty {
     private String subCountyCode;
 
     @ManyToOne
+//    @JsonIgnore
     private County county;
 
     @Column(name = "name",length = 50,nullable = false)

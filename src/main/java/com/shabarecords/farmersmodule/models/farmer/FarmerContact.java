@@ -1,5 +1,6 @@
 package com.shabarecords.farmersmodule.models.farmer;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shabarecords.farmersmodule.utils.enums.ContactPriority;
 import com.shabarecords.farmersmodule.utils.enums.ContactType;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class FarmerContact {
     private int code;
 
     @ManyToOne
+    @JsonIgnore
     private Farmer farmer;
 
     @Column(name = "subCountyCode",length = 50,nullable = false)
