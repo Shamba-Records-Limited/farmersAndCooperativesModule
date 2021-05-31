@@ -1,6 +1,5 @@
 package com.shabarecords.farmersmodule.models.regions;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.Column;

@@ -30,14 +30,16 @@ public class CooperativeFarmers {
     @ManyToOne
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull
+    @JsonIgnore
     private Cooperative cooperative;
 
     @JsonProperty(access= JsonProperty.Access.READ_ONLY)
     @JsonIgnore
     private boolean active = true;
 
-
+    @JsonProperty(access= JsonProperty.Access.READ_ONLY)
     private LocalDate effectiveFrom = LocalDate.now();
 
+    @JsonProperty(access= JsonProperty.Access.READ_ONLY)
     private LocalDate effectiveTo;
 }

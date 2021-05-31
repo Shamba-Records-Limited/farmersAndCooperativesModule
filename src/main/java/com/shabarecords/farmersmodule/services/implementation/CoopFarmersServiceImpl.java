@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author : Odinga David
@@ -23,7 +23,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class CoopFarmersServiceImpl implements CoopFarmersService {
+class CoopFarmersServiceImpl implements CoopFarmersService {
 
     private final CoopFarmersRepository repository;
 
@@ -48,7 +48,7 @@ public class CoopFarmersServiceImpl implements CoopFarmersService {
     @Override
     public ResponseEntity getCooperativeFarmers(String coopCode, PageRequest pageRequest) {
         try {
-            List<CooperativeFarmers> farmers= repository.findAllByCooperative_Code(coopCode, pageRequest);
+            List<CooperativeFarmers> farmers= repository.findAllByCooperativeCode(coopCode, pageRequest);
 
             if (farmers.size() > 0)
                 return ResponseEntity.ok(farmers);
@@ -75,7 +75,7 @@ public class CoopFarmersServiceImpl implements CoopFarmersService {
             List<CooperativeFarmers> farmers= repository.findAllByCooperative_CodeAndActive(cooperativeCode, active, pageRequest);
 
             if (farmers.size() > 0)
-                return ResponseEntity.ok(farmers);
+                return ResponseEntity.ok(farmers.stream().map(CooperativeFarmers::getFarmer).collect(Collectors.toList()));
 
             return ResponseEntity
                     .status(HttpStatus.EXPECTATION_FAILED)
@@ -92,12 +92,13 @@ public class CoopFarmersServiceImpl implements CoopFarmersService {
     }
 
     @Override
-    public ResponseEntity<APIResponse> deactivateFarmer(Long id) {
+    public ResponseEntity<APIResponse> deactivateFarmer(String code,  String growerCode) {
         try {
-            Optional<CooperativeFarmers> farmer = repository.findById(id);
-            if (farmer.isPresent()) {
 
-                CooperativeFarmers farmer1 = farmer.get();
+            if (repository.existsByFarmerGrowerIdAndCooperativeCodeAndActive(growerCode, code, true)) {
+
+                CooperativeFarmers farmer1 = repository
+                        .findFirstByFarmerGrowerIdAndCooperativeCodeAndActive(growerCode, code, true);
                 farmer1.setActive(false);
                 farmer1.setEffectiveTo(LocalDate.now());
 

@@ -23,7 +23,7 @@ import java.util.List;
 
     @Override
     public Farmer getFarmer(String farmer_id) {
-        return farmerRepository.getOne(farmer_id);
+        return farmerRepository.findById(farmer_id).orElse(null);
     }
 
     @Override
@@ -43,8 +43,7 @@ import java.util.List;
     @Override
     public Farmer addFarmer(Farmer farmer) {
 
-        Farmer farmer1 = new Farmer();
-        farmerRepository.save(farmer1);
+        farmerRepository.save(farmer);
 
         return farmer;
     }

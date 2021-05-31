@@ -1,5 +1,6 @@
 package com.shabarecords.farmersmodule.models.farmer;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.shabarecords.farmersmodule.utils.enums.Gender;
 import com.shabarecords.farmersmodule.models.regions.Village;
 import lombok.Data;
@@ -33,7 +34,8 @@ public class Farmer {
 
     private LocalDate dateOfBirth;
 
-    private LocalDate dateOfJoining;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDate dateOfJoining=LocalDate.now();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender",length = 7,nullable = false)

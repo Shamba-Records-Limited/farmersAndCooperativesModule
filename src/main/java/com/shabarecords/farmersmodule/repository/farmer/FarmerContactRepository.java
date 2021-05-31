@@ -2,6 +2,7 @@ package com.shabarecords.farmersmodule.repository.farmer;
 
 import com.shabarecords.farmersmodule.models.farmer.FarmerContact;
 import com.shabarecords.farmersmodule.utils.enums.ContactPriority;
+import com.shabarecords.farmersmodule.utils.enums.ContactType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,8 +27,9 @@ public interface FarmerContactRepository extends JpaRepository<FarmerContact, In
 
     @Modifying(clearAutomatically = true)
     @Query("UPDATE FarmerContact fc " +
-            "SET   fc.priority = 'SECONDARY' " +
-            "WHERE fc.priority = 'PRIMATY' " +
-            "and  fc.farmer.growerId = :growerId" )
-    void updateContact(@Param("growerId") String growerId);
+            " SET   fc.priority = 'SECONDARY' " +
+            " WHERE fc.priority = 'PRIMARY' " +
+            " and  fc.farmer.growerId = :growerId" +
+            " and fc.type =:contactType" )
+    void updateContact(@Param("growerId") String growerId, @Param("contactType") ContactType contactType);
 }

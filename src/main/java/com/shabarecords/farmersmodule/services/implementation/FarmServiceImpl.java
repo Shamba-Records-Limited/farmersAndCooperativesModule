@@ -4,8 +4,10 @@ import com.shabarecords.farmersmodule.models.farm.Farm;
 import com.shabarecords.farmersmodule.repository.farmer.FarmerRepository;
 import com.shabarecords.farmersmodule.repository.farmer.FarmRepository;
 import com.shabarecords.farmersmodule.services.FarmService;
+import com.shabarecords.farmersmodule.utils.APIResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -25,7 +27,7 @@ import java.util.Optional;
     private final FarmerRepository farmerRepository;
 
     @Override
-    public Farm addFarm(Farm farm) {
+    public ResponseEntity addFarm(Farm farm) {
         Assert.notNull(farm, "Farm cannot be null");
         Assert.notNull(farm.getFarmer(), "Farmer cannot be null");
 
@@ -33,8 +35,9 @@ import java.util.Optional;
         Assert.notNull(farm.getVillage(), "Village farm is located in has to be provided");
 
 
+        repository.save(farm);
 
-        return repository.save(farm);
+        return ResponseEntity.ok().body(APIResponse.ofSuccess());
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.shabarecords.farmersmodule.models.cooperative.CooperativeFarmers;
 import com.shabarecords.farmersmodule.utils.APIResponse;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -19,5 +20,5 @@ public interface CoopFarmersService {
 
     ResponseEntity getActiveCooperativeFarmers(String cooperativeCode, boolean active, PageRequest pageRequest);
 
-    ResponseEntity<APIResponse> deactivateFarmer(Long id);
+    ResponseEntity<APIResponse> deactivateFarmer( String code,  String growerCode);
 }

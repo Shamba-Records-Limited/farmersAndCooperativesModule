@@ -35,6 +35,5 @@ public class CoopContact {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "priority",length = 10,nullable = false)
-    @JsonIgnore
     private ContactPriority priority= ContactPriority.SECONDARY;
 }

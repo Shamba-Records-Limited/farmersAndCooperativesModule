@@ -1,7 +1,9 @@
 package com.shabarecords.farmersmodule.controller;
 
+import com.shabarecords.farmersmodule.models.farm.Farm;
 import com.shabarecords.farmersmodule.models.regions.SubCounty;
 import com.shabarecords.farmersmodule.models.regions.Village;
+import com.shabarecords.farmersmodule.services.FarmService;
 import com.shabarecords.farmersmodule.services.SubCountyService;
 import com.shabarecords.farmersmodule.services.VillageService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class SubCountyController {
 
     private final SubCountyService subCountyService;
     private final VillageService villageService;
+    private final FarmService farmService;
 
     @PostMapping
     public ResponseEntity<SubCounty> addSubCounty(@RequestBody SubCounty subCounty){
@@ -48,6 +51,14 @@ public class SubCountyController {
 
         return new ResponseEntity<>(villageService.findVillagesInSubCounty(subCountyCode, PageRequest.of(page, size)), HttpStatus.OK);
 
+    }
+
+    @GetMapping("/{subCountyCode}/farms")
+    public ResponseEntity<List<Farm>> viewSubCountyFarms(@PathVariable String subCountyCode,
+                                                       @RequestParam int page,
+                                                       @RequestParam int size){
+
+        return new ResponseEntity<>(farmService.getFarmsInASubCounty(subCountyCode, PageRequest.of(page, size)), HttpStatus.OK);
     }
 
 

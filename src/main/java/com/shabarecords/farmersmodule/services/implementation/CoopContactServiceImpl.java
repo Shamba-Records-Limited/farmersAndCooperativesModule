@@ -5,6 +5,7 @@ import com.shabarecords.farmersmodule.models.cooperative.CoopContact;
 import com.shabarecords.farmersmodule.repository.cooperative.CoopContactRepository;
 import com.shabarecords.farmersmodule.services.CoopContactService;
 import com.shabarecords.farmersmodule.utils.APIResponse;
+import com.shabarecords.farmersmodule.utils.enums.ContactPriority;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,9 @@ public class CoopContactServiceImpl implements CoopContactService {
     @Override
     public ResponseEntity addOrUpdateCooperative(CoopContact contact) {
         try {
-            repository.updateContact(contact.getCooperative().getCode());
+            if (contact.getPriority().equals(ContactPriority.PRIMARY
+            ))
+            repository.updateContact(contact.getCooperative().getCode(), contact.getType().toString());
 
             repository.save(contact);
 

@@ -22,7 +22,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ContactPersonServiceImpl implements ContactPersonService {
+class ContactPersonServiceImpl implements ContactPersonService {
 
     private final ContactPersonRepository repository;
 

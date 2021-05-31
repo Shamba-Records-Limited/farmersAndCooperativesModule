@@ -2,6 +2,7 @@ package com.shabarecords.farmersmodule.services;
 
 import com.shabarecords.farmersmodule.models.farm.Farm;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -11,17 +12,17 @@ import java.util.List;
  */
 public interface FarmService {
 
-    Farm addFarm(Farm farm);
+    ResponseEntity addFarm(Farm farm);
 
     Farm getFarm(Integer id);
 
     List<Farm> getFarmersFarms(String growerId);
 
-    List<Farm> getFarmsInAVillage(Integer growerId, PageRequest  request);
+    List<Farm> getFarmsInAVillage(Integer villageId, PageRequest  request);
 
-    List<Farm> getFarmsInASubCounty(String growerId, PageRequest  request);
+    List<Farm> getFarmsInASubCounty(String villageId, PageRequest  request);
 
-    List<Farm> getFarmsInACounty(String growerId, PageRequest  request);
+    List<Farm> getFarmsInACounty(String villageId, PageRequest  request);
 
 
 

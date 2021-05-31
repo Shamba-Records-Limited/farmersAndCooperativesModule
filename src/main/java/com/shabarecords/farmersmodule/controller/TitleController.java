@@ -23,7 +23,9 @@ public class TitleController {
     private final TitleService titleService;
 
     @PostMapping
-    public ResponseEntity<Title> addTitle(Title title) {
+    public ResponseEntity<Title> addTitle(@RequestParam String name) {
+        Title title= new Title();
+        title.setName(name);
         return new ResponseEntity<>(titleService.addTitle(title), HttpStatus.OK);
     }
 
@@ -35,7 +37,7 @@ public class TitleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Title>> addTitles(@RequestParam() int page, @RequestParam() int size) {
+    public ResponseEntity<List<Title>> viewTitles(@RequestParam() int page, @RequestParam() int size) {
 
         return new ResponseEntity<>(titleService.getTitles(PageRequest.of(page, size)), HttpStatus.OK);
     }

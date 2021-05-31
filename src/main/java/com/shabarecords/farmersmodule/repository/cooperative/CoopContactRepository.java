@@ -21,8 +21,9 @@ public interface CoopContactRepository extends JpaRepository<CoopContact, Intege
 
     @Modifying(clearAutomatically = true)
     @Query("UPDATE CoopContact cc " +
-            "SET   cc.priority = 'SECONDARY' " +
-            "WHERE cc.priority = 'PRIMATY' " +
-            "and  cc.cooperative.code = :coopCode" )
-    void updateContact(@Param("coopCode") String coopCode);
+            " SET   cc.priority = 'SECONDARY' " +
+            " WHERE cc.priority = 'PRIMARY' " +
+            " and  cc.cooperative.code = :coopCode" +
+            " and  cc.type = :contactType" )
+    void updateContact(@Param("coopCode") String coopCode, @Param("contactType") String type);
 }

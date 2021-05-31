@@ -4,6 +4,7 @@ import com.shabarecords.farmersmodule.models.farmer.FarmerContact;
 import com.shabarecords.farmersmodule.repository.farmer.FarmerContactRepository;
 import com.shabarecords.farmersmodule.services.FarmerContactService;
 import com.shabarecords.farmersmodule.utils.APIResponse;
+import com.shabarecords.farmersmodule.utils.enums.ContactPriority;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,8 @@ import java.util.List;
     @Override
     public ResponseEntity addContact(FarmerContact contact) {
         try {
-            contactRepository.updateContact(contact.getFarmer().getGrowerId());
+            if (contact.getPriority().equals(ContactPriority.PRIMARY))
+            contactRepository.updateContact(contact.getFarmer().getGrowerId(), contact.getType());
 
             contactRepository.save(contact);
 

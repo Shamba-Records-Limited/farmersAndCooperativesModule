@@ -27,7 +27,7 @@ import java.util.List;
 
     @Override
     public Cooperative getCooperative(String code) {
-        return repository.getOne(code);
+        return repository.findById(code).orElse(null);
     }
 
     @Override
