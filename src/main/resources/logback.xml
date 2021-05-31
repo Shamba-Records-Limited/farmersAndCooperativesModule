@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <property name="LOG_PATH" value="/var/log/farmers"/>
+    <appender name="SAVE-TO-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/farmers.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}} ${LOG_LEVEL_PATTERN:-%5p} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}
+            </Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${LOG_PATH}/Archived_farmers_%d{yyyy-MM-dd}_%i.log
+            </fileNamePattern>
+            <maxFileSize>30MB</maxFileSize>
+            <maxHistory>500</maxHistory>
+            <totalSizeCap>10000MB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>
+                %clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p})
+                %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan}
+                %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}
+            </Pattern>
+        </encoder>
+    </appender>
+
+    <springProfile name="prod">
+        <root level="ERROR">
+            <appender-ref ref="SAVE-TO-FILE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="staging">
+
+        <root level="info">
+            <appender-ref ref="SAVE-TO-FILE"/>
+        </root>
+    </springProfile>
+    <springProfile name="dev">
+
+        <root level="info">
+            <!--  <appender-ref ref="STDOUT"/>-->
+            <appender-ref ref="SAVE-TO-FILE"/>
+        </root>
+    </springProfile>
+</configuration>

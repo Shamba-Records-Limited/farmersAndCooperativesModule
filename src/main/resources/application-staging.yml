@@ -1,0 +1,51 @@
+#===============================
+# = Server Cofiguration
+# ===============================
+server:
+  port: 3003
+  servlet:
+    context-path: /
+
+
+
+# ===============================
+# = DATA SOURCE
+# ===============================
+spring:
+  datasource:
+    username: erp
+    password: kd_Nf@5h-C4fH
+    url: jdbc:mysql://141.125.65.199:3306/Farmers?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&useLegacyDatetimeCode=false
+
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    testWhileIdle: true
+    validationQuery: SELECT 1
+
+
+
+
+  #  ===============================
+  # = JPA / HIBERNATE
+  # ===============================
+  jpa:
+    show_sql: false
+    format_sql: false
+
+    hibernate:
+      naming:
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 500
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        enable_lazy_load_no_trans: true
+        #        generate_statistics: true
+        order_inserts: true
+        order_updates: true
+
+
+
+

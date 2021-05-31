@@ -1,0 +1,37 @@
+
+# ========================================
+# Profiles
+# ========================================
+spring:
+  application:
+    name: farmers_cooperative
+  profiles:
+    active: staging
+
+  # =================================
+  # Date
+  # ================================
+  jackson:
+    date-format: dd-MM-yyyy HH:mm:ss
+    time-zone: Africa/Nairobi
+
+  # =================================
+  # Pagination
+  # =================================
+  data:
+    web:
+      pageable:
+        default-page-size: 500
+
+
+
+# ========================================
+#  Eureka
+# ========================================
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://141.125.65.199:8761/eureka
+
+
+
