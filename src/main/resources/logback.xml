@@ -31,7 +31,7 @@
     </appender>
 
     <springProfile name="prod">
-        <root level="ERROR">
+        <root level="info">
             <appender-ref ref="SAVE-TO-FILE"/>
         </root>
     </springProfile>

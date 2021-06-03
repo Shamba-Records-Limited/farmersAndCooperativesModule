@@ -1,4 +1,4 @@
-package com.shabarecords.farmersmodule.utils.configs;
+package com.shabarecords.farmersmodule.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
