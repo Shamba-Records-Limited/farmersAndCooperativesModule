@@ -1,109 +1,126 @@
 package com.shabarecords.farmersmodule.controller;
 
-import com.shabarecords.farmersmodule.models.farm.CoffeeTreesRecord;
-import com.shabarecords.farmersmodule.models.farm.Farm;
-import com.shabarecords.farmersmodule.models.farmer.Farmer;
-import com.shabarecords.farmersmodule.models.farmer.FarmerContact;
-import com.shabarecords.farmersmodule.models.regions.Village;
-import com.shabarecords.farmersmodule.services.*;
+import com.shabarecords.farmersmodule.services.FarmerService;
+import com.shabarecords.farmersmodule.utils.APIResponse;
+import com.shabarecords.farmersmodule.utils.databind.*;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author : Odinga David
  * @since : 5/20/21, Thu
  */
 
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(path = "/farmers")
+@Api(tags = {"Farmers"})
 public class FarmerController {
 
-    private final FarmService farmService;
     private final FarmerService farmerService;
-    private final FarmerContactService contactService;
-    private final CoffeeTreesRecordService recordService;
-    private final VillageService villageService;
+
+    @PostMapping
+
+    @ApiOperation(value = "Add Farmer")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = " Bad request ", response = APIResponse.class),
+            @ApiResponse(code = 500, message = " Server error", response = APIResponse.class),
+            @ApiResponse(code = 401, message = " Access Denied, Authorization token is required", response = APIResponse.class),
+            @ApiResponse(code = 403, message = " Unauthorized, Authorization token is required", response = APIResponse.class)
+    })
+    public ResponseEntity<APIResponse> addFarmer(@Valid @RequestBody AddFarmerRequest request) {
+
+        return farmerService.addFarmer(request);
+    }
+
+    @PutMapping("/{farmerId}")
+
+    @ApiOperation(value = "Update Farmer")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = " Bad request ", response = APIResponse.class),
+            @ApiResponse(code = 500, message = " Server error", response = APIResponse.class),
+            @ApiResponse(code = 401, message = " Access Denied, Authorization token is required", response = APIResponse.class),
+            @ApiResponse(code = 403, message = " Unauthorized, Authorization token is required", response = APIResponse.class)
+    })
+    public ResponseEntity<APIResponse> updateFarmer(@PathVariable("farmerId") Long growerCode,
+                                                    @Valid @RequestBody UpdateFarmerRequest updateRequest) {
+        return farmerService.updateFarmer(growerCode, updateRequest);
+    }
+
 
     @GetMapping("/{growerCode}")
-    public ResponseEntity<Farmer> viewFarmer(@PathVariable String growerCode) {
-        return new ResponseEntity<>(farmerService.getFarmer(growerCode), HttpStatus.OK);
+
+    @ApiOperation(value = "Find Farmer given growerCode")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = " Bad request ", response = APIResponse.class),
+            @ApiResponse(code = 500, message = " Server error", response = APIResponse.class),
+            @ApiResponse(code = 401, message = " Access Denied, Authorization token is required", response = APIResponse.class),
+            @ApiResponse(code = 403, message = " Unauthorized, Authorization token is required", response = APIResponse.class)
+    })
+    public ResponseEntity<Farmer> getFarmer(@PathVariable String growerCode) {
+        return farmerService.getFarmer(growerCode);
     }
 
 
     @GetMapping
-    public ResponseEntity<List<Farmer>> viewAllFarmers(@RequestParam int page, @RequestParam int size) {
 
-        List<Farmer> farmers = farmerService.getAllFarmers(PageRequest.of(page, size));
+    @ApiOperation(value = "Get Available Farmers")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = " Bad request ", response = APIResponse.class),
+            @ApiResponse(code = 500, message = " Server error", response = APIResponse.class),
+            @ApiResponse(code = 401, message = " Access Denied, Authorization token is required", response = APIResponse.class),
+            @ApiResponse(code = 403, message = " Unauthorized, Authorization token is required", response = APIResponse.class)
+    })
+    public ResponseEntity<Page<Farmer>> getFarmers(@ApiParam(value = "size", defaultValue = "500")
+                                                   @RequestParam(value = "size", required = false) int size,
+                                                   @RequestParam(value = "page", required = false, defaultValue = "0") int page) {
 
-        return new ResponseEntity<>(farmers, HttpStatus.OK);
-    }
-
-    @PostMapping
-    public ResponseEntity<Farmer> addFarmer(@RequestBody Farmer farmer, @RequestParam Integer villageId) {
-        farmer.setVillage(villageService.findVillage(villageId));
-        return new ResponseEntity<>(farmerService.addFarmer(farmer), HttpStatus.OK);
-    }
-
-    @PutMapping
-    public ResponseEntity<Farmer> updateFarmer(@RequestBody Farmer farmer) {
-
-        return new ResponseEntity<>(farmerService.updateFarmer(farmer), HttpStatus.OK);
+        Pageable pageable = PageRequest.of(Objects.isNull(page) ? 0 : page, Objects.isNull(size) ? 500 : size);
+        return farmerService.getFarmers(pageable);
     }
 
 
-    @PostMapping("/{growerCode}/contact")
-    public ResponseEntity addFarmerContact(
-            @RequestBody FarmerContact contact,
-            @PathVariable String growerCode){
+    @PostMapping("/{farmerId}/farm")
 
-        contact.setFarmer(farmerService.getFarmer(growerCode));
+    @ApiOperation(value = "Add Farmer's Farm")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = " Bad request ", response = APIResponse.class),
+            @ApiResponse(code = 500, message = " Server error", response = APIResponse.class),
+            @ApiResponse(code = 401, message = " Access Denied, Authorization token is required", response = APIResponse.class),
+            @ApiResponse(code = 403, message = " Unauthorized, Authorization token is required", response = APIResponse.class)
+    })
+    public ResponseEntity<APIResponse> addFarm(
+            @PathVariable Long farmerId,
+            @Valid @RequestBody FarmRequest farmRequest
+    ) {
 
-        return contactService.addContact(contact);
+
+        return farmerService.addFarm(farmerId, farmRequest);
     }
 
-
-    @GetMapping("/{growerCode}/contacts")
-    public ResponseEntity<List<FarmerContact>> getFarmerContacts(@PathVariable String growerCode){
-
-        return new ResponseEntity<>(contactService.getFarmerContact(growerCode), HttpStatus.OK);
-    }
-
-    @PostMapping("/{growerCode}/farm")
-    public ResponseEntity addFarm(
-            @RequestBody @NotNull Farm farm,
-            @PathVariable String growerCode){
-
-        farm.setFarmer(farmerService.getFarmer(growerCode));
-
-        return farmService.addFarm(farm);
-    }
-
-
-    @GetMapping("/farm/{id}")
-    public ResponseEntity viewFarm(@PathVariable Integer id){
-        return ResponseEntity.ok().body(farmService.getFarm(id));
-    }
 
     @GetMapping("/{growerCode}/farm")
-    public ResponseEntity<List<Farm>> viewFarms(@PathVariable String growerCode){
+    @ApiOperation(value = "Get Farmers Available Farms")
+    @ApiResponses(value = {
+            @ApiResponse(code = 400, message = " Bad request ", response = APIResponse.class),
+            @ApiResponse(code = 500, message = " Server error", response = APIResponse.class),
+            @ApiResponse(code = 401, message = " Access Denied, Authorization token is required", response = APIResponse.class),
+            @ApiResponse(code = 403, message = " Unauthorized, Authorization token is required", response = APIResponse.class)
+    })
+    public ResponseEntity<List<FarmData>> getGrowerFarms(@PathVariable String growerCode) {
 
-        return ResponseEntity.ok().body(farmService.getFarmersFarms(growerCode));
+        return farmerService.getGrowerFarms(growerCode);
     }
-
-
-    @GetMapping("/{growerCode}/coffee-trees")
-    public ResponseEntity viewCofeeTrees(@PathVariable String growerCode){
-
-        return recordService.getFarmerCoffeeTrees(growerCode);
-    }
-
 
 
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shabarecords.farmersmodule.utils.APIResponse;
 import io.jsonwebtoken.JwtException;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -33,6 +34,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
+@Slf4j
 public class APIExceptionHandler extends ResponseEntityExceptionHandler {
 
     private final ObjectMapper mapper;
@@ -46,7 +48,7 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ConversionFailedException.class)
     public ResponseEntity<Object> handleConflict(RuntimeException ex) {
-        //LOGGER.error("Err", ex);
+        log.error("Err",ex);
         return ResponseEntity.status(BAD_REQUEST).body(APIResponse.ofError(ex.getLocalizedMessage()));
     }
 
@@ -54,7 +56,7 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatus status, WebRequest request) {
-        // LOGGER.error("Err", ex);
+        log.error("Err",ex);
 
         //Get all errors
         List<Map<String, String>> response = new ArrayList<>();
@@ -80,7 +82,7 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-        LOGGER.error("Err", ex);
+        log.error("Err",ex);
         final Throwable cause = ex.getCause();
 
         String message = "";
@@ -104,7 +106,7 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     protected ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex
     ) {
-        // LOGGER.error("Err", ex);
+        log.error("Err",ex);
         return ResponseEntity.status(BAD_REQUEST).body(APIResponse.ofError(
                 String.format("The parameter '%s' of value '%s' could not be converted to type '%s'",
                         ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName())));
@@ -122,6 +124,7 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<Object> handleThrowable(final Throwable ex) {
+        log.error("Err",ex);
         if (ex instanceof ConstraintViolationException) {
 
             return ResponseEntity.status(BAD_REQUEST).body(APIResponse.ofError(ex.getLocalizedMessage()));
@@ -130,5 +133,23 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
         }
         LOGGER.error("Unexpected Error", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(APIResponse.ofError(ex.getLocalizedMessage()));
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(
+            Exception exception,
+            Object body,
+            HttpHeaders headers,
+            HttpStatus status,
+            WebRequest request) {
+
+
+        // for all exceptions that are not overriden, the body is null, so we can
+        // just provide new body based on error message and call super method
+        APIResponse apiError = status.is4xxClientError() ? APIResponse.ofError(exception.getMessage()) :
+                APIResponse.ofInternalServerError(exception.getMessage());
+
+
+        return super.handleExceptionInternal(exception, apiError, headers, status, request);
     }
 }

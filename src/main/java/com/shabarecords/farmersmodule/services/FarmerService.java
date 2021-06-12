@@ -1,7 +1,11 @@
 package com.shabarecords.farmersmodule.services;
 
-import com.shabarecords.farmersmodule.models.farmer.Farmer;
-import org.springframework.data.domain.PageRequest;
+
+import com.shabarecords.farmersmodule.utils.APIResponse;
+import com.shabarecords.farmersmodule.utils.databind.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -11,12 +15,16 @@ import java.util.List;
  */
 public interface FarmerService {
 
-    Farmer getFarmer(String farmer_id);
 
-    List<Farmer> getAllFarmers(PageRequest request);
+    ResponseEntity<APIResponse> addFarmer(AddFarmerRequest request);
 
-    Farmer updateFarmer(Farmer farmer);
+    ResponseEntity<APIResponse> updateFarmer(Long growerCode, UpdateFarmerRequest updateRequest);
 
-    Farmer addFarmer(Farmer farmer);
+    ResponseEntity<Farmer> getFarmer(String growerCode);
 
+    ResponseEntity<Page<Farmer>> getFarmers(Pageable pageable);
+
+    ResponseEntity<APIResponse> addFarm(Long farmerId, FarmRequest farmRequest);
+
+    ResponseEntity<List<FarmData>> getGrowerFarms(String growerCode);
 }

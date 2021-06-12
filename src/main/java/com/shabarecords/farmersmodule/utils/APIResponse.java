@@ -64,6 +64,14 @@ public class APIResponse implements Serializable {
         return apiResponse;
     }
 
+    public static APIResponse ofInternalServerError(String message) {
+        APIResponse apiResponse = new APIResponse();
+        apiResponse.setStatus(5);
+        apiResponse.setMessage(message);
+
+        return apiResponse;
+    }
+
 
 
 

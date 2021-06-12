@@ -6,5 +6,10 @@ package com.shabarecords.farmersmodule.utils.enums;
  */
 public enum Gender {
 
-    MALE, FEMALE
+    MALE, FEMALE,UNKNOWN;
+
+    @Override
+    public String toString() {
+        return "MALE, FEMALE,UNKNOWN";
+    }
 }
