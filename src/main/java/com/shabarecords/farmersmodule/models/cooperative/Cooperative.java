@@ -2,6 +2,7 @@ package com.shabarecords.farmersmodule.models.cooperative;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.shabarecords.farmersmodule.models.regions.SubCounty;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -16,6 +17,7 @@ import javax.persistence.ManyToOne;
 
 @Data
 @Entity
+@Builder
 public class Cooperative {
 
     @Column(name = "name",length = 150,nullable = false)
@@ -31,6 +33,15 @@ public class Cooperative {
     @Column(name = "address",length = 150,nullable = false)
     private String address;
 
-    @JsonProperty(access= JsonProperty.Access.READ_ONLY)
-    private Integer numberOfTrees;
+    @Column(name = "primaryPhone",unique=true, length = 13,nullable = false)
+    private String primaryPhone;
+
+    @Column(name = "secondaryPhone",unique=true, length = 13,nullable = false)
+    private String secondaryPhone;
+
+    @Column(name = "primaryEmail",unique=true, length = 100,nullable = false)
+    private String primaryEmail;
+
+    @Column(name = "secondaryEmail",unique=true, length = 100,nullable = false)
+    private String secondaryEmail;
 }

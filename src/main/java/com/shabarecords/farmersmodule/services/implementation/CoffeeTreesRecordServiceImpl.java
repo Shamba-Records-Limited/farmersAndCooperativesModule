@@ -45,16 +45,6 @@ class CoffeeTreesRecordServiceImpl implements CoffeeTreesRecordService {
             Assert.notNull(trees.getFarm().getFarmer().getGrowerId(), "Farmer growerID has to be provided");
 
 
-            Cooperative cooperative = coopFarmersRepository.findFirstByFarmer_GrowerIdAndActive(
-                    trees.getFarm()
-                            .getFarmer()
-                            .getGrowerId(), true).getCooperative();
-
-            if (cooperative != null) {
-                cooperative.setNumberOfTrees(-trees1.getNumberOfTrees()+trees.getNumberOfTrees());
-                cooperativeRepository.save(cooperative);
-
-            }
         }
 
 

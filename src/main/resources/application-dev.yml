@@ -13,7 +13,7 @@ server:
 spring:
   datasource:
     username: root
-    password: r00t
+    password:
     url: jdbc:mysql://localhost:3306/Farmers?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false&useUnicode=true&useLegacyDatetimeCode=false
 
     driver-class-name: com.mysql.cj.jdbc.Driver

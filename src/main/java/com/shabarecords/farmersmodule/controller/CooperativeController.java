@@ -7,6 +7,8 @@ import com.shabarecords.farmersmodule.models.cooperative.CooperativeFarmers;
 import com.shabarecords.farmersmodule.models.farmer.Farmer;
 import com.shabarecords.farmersmodule.services.*;
 import com.shabarecords.farmersmodule.utils.APIResponse;
+import com.shabarecords.farmersmodule.utils.dto.CooperativeDto;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -30,17 +32,23 @@ public class CooperativeController {
     private final CoopFarmersService coopFarmersService;
     private final FarmerService farmerService;
     private final ContactPersonService contactPersonService;
+    private final SubCountyService subCountyService;
 
     @PostMapping
-    public ResponseEntity<Cooperative> addCooperative(@RequestBody Cooperative cooperative) {
+    public ResponseEntity<Cooperative> addCooperative(@RequestBody CooperativeDto cooperative) {
 
-        return new ResponseEntity<>(coopService.addOrUpdateCooperative(cooperative), HttpStatus.OK);
+        Cooperative coop = cooperative.toCooperative();
+        coop.setSubCounty(subCountyService.getSubCounty(cooperative.getSubCountyCode()));
+
+        return new ResponseEntity<>(coopService.addOrUpdateCooperative(coop), HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<Cooperative> updateCooperative(@RequestBody Cooperative cooperative) {
+    public ResponseEntity<Cooperative> updateCooperative(@RequestBody CooperativeDto cooperative) {
+        Cooperative coop = cooperative.toCooperative();
+        coop.setSubCounty(subCountyService.getSubCounty(cooperative.getSubCountyCode()));
 
-        return new ResponseEntity<>(coopService.addOrUpdateCooperative(cooperative), HttpStatus.OK);
+        return new ResponseEntity<>(coopService.addOrUpdateCooperative(coop), HttpStatus.OK);
     }
 
     @GetMapping
@@ -53,6 +61,7 @@ public class CooperativeController {
         return new ResponseEntity<>(coopService.getCooperative(code), HttpStatus.OK);
     }
 
+    @ApiOperation(value="CooperativeDto Contact person", hidden=true)
     @PostMapping("/{code}/contact")
     public ResponseEntity addContact(
             @RequestBody CoopContact contact,
@@ -67,6 +76,7 @@ public class CooperativeController {
 
     }
 
+    @ApiOperation(value="CooperativeDto Contact person", hidden=true)
     @PostMapping("/{code}/contacts/add-all")
     public ResponseEntity<List<CoopContact>> addAllContact(
             @RequestBody List<CoopContact> contacts,
@@ -79,6 +89,7 @@ public class CooperativeController {
         return new ResponseEntity<>(contacts, HttpStatus.OK);
     }
 
+    @ApiOperation(value="CooperativeDto Contact person", hidden=true)
     @GetMapping("/{code}/contacts")
     public ResponseEntity<List<CoopContact>> viewCoopContacts(@PathVariable String code){
 
@@ -117,7 +128,7 @@ public class CooperativeController {
         return  coopFarmersService.deactivateFarmer(code, growerCode);
     }
 
-
+    @ApiOperation(value="CooperativeDto Contact person", hidden=true)
     @PostMapping("/{code}/contact-person")
     public ResponseEntity<APIResponse> addContactPerson(@PathVariable String code,
                                                      @RequestBody ContactPerson contactPerson){
@@ -133,17 +144,20 @@ public class CooperativeController {
         return contactPersonService.addContactPerson(contactPerson);
     }
 
+    @ApiOperation(value="CooperativeDto Contact person", hidden=true)
     @GetMapping("/contact-person/{id}")
     public ResponseEntity viewContactPerson(@PathVariable Integer id){
         return contactPersonService.getContactPerson(id);
     }
 
+    @ApiOperation(value="CooperativeDto Contact person", hidden=true)
     @DeleteMapping("/contact-person/{id}")
     public ResponseEntity deleteContactPerson(@PathVariable Integer id){
         return contactPersonService.deactivateContactPersons(id);
     }
-
-
+    
+    
+    @ApiOperation(value="CooperativeDto Contact person", hidden=true)
     @GetMapping("/{code}/contact-person")
     public ResponseEntity viewCooperativeContactPerson(@PathVariable String code,
                                                        @RequestParam String active){

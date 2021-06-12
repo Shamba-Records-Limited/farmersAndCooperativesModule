@@ -29,7 +29,7 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.basePackage("com.shabarecords.farmersmodule.controller"))
                 .paths(PathSelectors.any())
                 .build().apiInfo(
-                        new ApiInfoBuilder().title("Farmer & Cooperative Module")
+                        new ApiInfoBuilder().title("Farmer & CooperativeDto Module")
                                 .description(
                                         "")
                                 .termsOfServiceUrl("")

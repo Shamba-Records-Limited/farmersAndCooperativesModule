@@ -6,7 +6,7 @@ spring:
   application:
     name: farmers_cooperative
   profiles:
-    active: staging
+    active: dev
 
   # =================================
   # Date
