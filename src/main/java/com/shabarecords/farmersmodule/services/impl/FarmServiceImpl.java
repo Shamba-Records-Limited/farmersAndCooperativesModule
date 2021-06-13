@@ -1,10 +1,10 @@
 package com.shabarecords.farmersmodule.services.impl;
 
+import com.shabarecords.farmersmodule.models.Cooperatives;
 import com.shabarecords.farmersmodule.models.Farm;
 import com.shabarecords.farmersmodule.models.Farmers;
 import com.shabarecords.farmersmodule.models.Region;
 import com.shabarecords.farmersmodule.repository.FarmRepository;
-import com.shabarecords.farmersmodule.repository.FarmerRepository;
 import com.shabarecords.farmersmodule.repository.RegionRepository;
 import com.shabarecords.farmersmodule.services.FarmService;
 import com.shabarecords.farmersmodule.utils.APIResponse;
@@ -33,7 +33,7 @@ public class FarmServiceImpl implements FarmService {
 
 
     @Override
-    public ResponseEntity<APIResponse> addFarm(Farmers farmers, FarmRequest request) {
+    public ResponseEntity<APIResponse> addFarm(Farmers farmers, Cooperatives cooperative, FarmRequest request) {
 
         try {
 
@@ -55,7 +55,7 @@ public class FarmServiceImpl implements FarmService {
             }
 
 
-            farmRepository.save(Farm.of(request, region,farmers));
+            farmRepository.save(Farm.of(request, region,farmers,cooperative));
 
             return ResponseEntity.ok(APIResponse.ofSuccess());
 
@@ -70,5 +70,10 @@ public class FarmServiceImpl implements FarmService {
     @Override
     public ResponseEntity<List<FarmData>> getGrowerFarms(String growerCode) {
         return ResponseEntity.ok(farmRepository.findByFarmer_Code(growerCode));
+    }
+
+    @Override
+    public ResponseEntity<List<FarmData>> getCooperativeFarms(String coopCode) {
+        return ResponseEntity.ok(farmRepository.findByCooperatives_Code(coopCode));
     }
 }

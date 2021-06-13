@@ -37,7 +37,9 @@ public class SwaggerConfig {
                                 .termsOfServiceUrl("")
                                 .version("1.00.00").contact(new Contact("Test", "https://example.com", "https://example.com")).build()
                 ).tags(new Tag("Regions", "Regions Covered By Organisation", 1),
-                        new Tag("Farmers","Manage adding farmer bio data"));
+                        new Tag("Farmers","Farmers",2),
+                        new Tag("Cooperatives","Cooperatives",3));
+
     }
 
 }

@@ -11,7 +11,7 @@
     </parent>
     <groupId>com.shabarecords</groupId>
     <artifactId>farmers-module</artifactId>
-    <version>1.00.00</version>
+    <version>1.00.01</version>
     <name>farmers</name>
     <description>Farmers module for the cofee application</description>
     <properties>

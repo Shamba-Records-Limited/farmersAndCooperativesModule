@@ -4,6 +4,7 @@ package com.shabarecords.farmersmodule.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.shabarecords.farmersmodule.utils.PhoneNumberUtil;
 import com.shabarecords.farmersmodule.utils.databind.AddFarmerRequest;
+import com.shabarecords.farmersmodule.utils.databind.UpdateFarmerRequest;
 import com.shabarecords.farmersmodule.utils.enums.Gender;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,7 +26,6 @@ public class Farmers implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private Long id;
-
 
     @Column(name = "code", length = 20, unique = true)
     private String code;
@@ -67,7 +67,7 @@ public class Farmers implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     private Region region;
 
-    @OneToMany(mappedBy = "farmer", cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "farmer", cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     private Set<Farm> farmSet;
 
     @Column(name = "dateCreated", updatable = false, insertable = false,
@@ -100,6 +100,47 @@ public class Farmers implements Serializable {
 
         return farmers;
 
+
+    }
+
+    public static Farmers ofUpdate(Farmers farmers, UpdateFarmerRequest updateRequest, Region region) {
+
+        if (updateRequest.getFirstName() != null)
+            farmers.setFirstName(updateRequest.getFirstName());
+
+        if (updateRequest.getMiddleName() != null)
+            farmers.setMiddleName(updateRequest.getMiddleName());
+
+        if (updateRequest.getLastName() != null)
+            farmers.setLastName(updateRequest.getLastName());
+
+
+        if (updateRequest.getNationalId() != null)
+            farmers.setNationalId(updateRequest.getNationalId());
+
+        if (updateRequest.getDateOfBirth() != null)
+            farmers.setDateOfBirth(updateRequest.getDateOfBirth());
+
+
+        if (updateRequest.getGender() != null)
+            farmers.setGender(Gender.valueOf(updateRequest.getGender()));
+
+        if (updateRequest.getEmail() != null)
+            farmers.setEmail(updateRequest.getEmail());
+
+
+        if (updateRequest.getPrimaryPhone() != null)
+            farmers.setPrimaryPhone(updateRequest.getPrimaryPhone());
+
+
+        if (updateRequest.getSecondaryPhone() != null)
+            farmers.setSecondaryPhone(PhoneNumberUtil.getFormattedPhoneNumber(updateRequest.getSecondaryPhone()));
+
+
+        if (updateRequest.getRegionCode() != null)
+            farmers.setRegion(region);
+
+        return farmers;
 
     }
 }

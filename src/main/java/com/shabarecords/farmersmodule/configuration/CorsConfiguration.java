@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
-//@EnableConfigurationProperties
+
 public class CorsConfiguration implements WebMvcConfigurer{
 
     @Override

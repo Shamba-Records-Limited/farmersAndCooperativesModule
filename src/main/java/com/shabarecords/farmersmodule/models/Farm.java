@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 
 @Entity
@@ -44,6 +45,10 @@ public class Farm implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     private Farmers farmer;
 
+    @JoinColumn(name = "cooperativeId", referencedColumnName = "Id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    private Cooperatives cooperatives;
+
     @Column(name = "dateCreated", updatable = false, insertable = false,
             columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -57,18 +62,25 @@ public class Farm implements Serializable {
     private LocalDateTime lastModified;
 
 
-    public Farm(String location, String description, Double noOfAcres, Integer noOfTrees, Region region, Farmers farmer) {
+    public Farm(String location, String description, Double noOfAcres, Integer noOfTrees, Region region) {
         this.location = location;
         this.description = description;
         this.noOfAcres = noOfAcres;
         this.noOfTrees = noOfTrees;
         this.region = region;
-        this.farmer = farmer;
+
     }
 
-    public static Farm of(FarmRequest farmRequest, Region region, Farmers farmers) {
+    public static Farm of(FarmRequest farmRequest, Region region, Farmers farmers, Cooperatives cooperative) {
 
-        return new Farm(farmRequest.getLocation(), farmRequest.getDescription(), farmRequest.getNoOfAcres(), farmRequest.getNoOfTrees(),
-                region, farmers);
+        Farm farm = new Farm(farmRequest.getLocation(), farmRequest.getDescription(), farmRequest.getNoOfAcres(), farmRequest.getNoOfTrees(),
+                region);
+
+        if (Objects.isNull(farmers)) {
+            farm.setCooperatives(cooperative);
+        } else {
+            farm.setFarmer(farmers);
+        }
+        return farm;
     }
 }

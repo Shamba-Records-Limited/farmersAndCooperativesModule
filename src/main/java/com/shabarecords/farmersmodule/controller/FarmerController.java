@@ -110,7 +110,7 @@ public class FarmerController {
 
 
     @GetMapping("/{growerCode}/farm")
-    @ApiOperation(value = "Get Farmers Available Farms")
+    @ApiOperation(value = "Get Farmer's Available Farms")
     @ApiResponses(value = {
             @ApiResponse(code = 400, message = " Bad request ", response = APIResponse.class),
             @ApiResponse(code = 500, message = " Server error", response = APIResponse.class),

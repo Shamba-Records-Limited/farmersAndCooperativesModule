@@ -32,8 +32,8 @@ public class UpdateFarmerRequest implements Serializable {
     private LocalDate dateOfBirth;
 
     @ValueOfEnum(enumClass = Gender.class)
-    @ApiModelProperty(allowableValues = "MALE,FEMALE,UNKNOWN")
-    private Gender gender;
+
+    private String gender;
 
     private String email;
 

@@ -1,5 +1,6 @@
 package com.shabarecords.farmersmodule.services;
 
+import com.shabarecords.farmersmodule.models.Cooperatives;
 import com.shabarecords.farmersmodule.models.Farmers;
 import com.shabarecords.farmersmodule.utils.APIResponse;
 import com.shabarecords.farmersmodule.utils.databind.FarmData;
@@ -10,7 +11,8 @@ import java.util.List;
 
 public interface FarmService {
 
-    ResponseEntity<APIResponse> addFarm(Farmers farmers, FarmRequest farmRequest);
+    ResponseEntity<APIResponse> addFarm(Farmers farmers, Cooperatives cooperative, FarmRequest farmRequest);
     public ResponseEntity<List<FarmData>> getGrowerFarms(String growerCode);
+    public ResponseEntity<List<FarmData>> getCooperativeFarms(String coopCode);
 
 }

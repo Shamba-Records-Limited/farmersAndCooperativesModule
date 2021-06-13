@@ -95,7 +95,7 @@ public class FarmerServiceImpl implements FarmerService {
             // add Farms
             request.getFarms().forEach(
                     farmRequest -> {
-                        farmService.addFarm(farmers, farmRequest);
+                        farmService.addFarm(farmers, null, farmRequest);
                     }
             );
 
@@ -113,91 +113,70 @@ public class FarmerServiceImpl implements FarmerService {
 
     @Override
     public ResponseEntity<APIResponse> updateFarmer(Long farmerId, UpdateFarmerRequest updateRequest) {
-//        try {
-//
-//            Optional<Farmers> farmers = farmerRepository.findById(farmerId);
-//
-//            if (!farmers.isPresent()) {
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                        APIResponse.ofError(String.format("Could not find Farmer record with id %s ",
-//                                farmerId)));
-//            }
-//
-//            Farmers farmer = farmers.get();
-//
-//
-//            // Format PhoneNo
-//            String phoneNo = PhoneNumberUtil.getFormattedPhoneNumber(userRequest.getPhoneNo());
-//            userRequest.setPhoneNo(phoneNo);
-//
-//            // Check for Duplicate | PhoneNo
-//            if (!user.getPhoneNo().equals(userRequest.getPhoneNo()))
-//                if (usersRepository.existsByPhoneNo(userRequest.getPhoneNo())) {
-//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                            APIResponse.ofError(String.format("User with phoneNo %s already exists",
-//                                    userRequest.getPhoneNo())));
-//                }
-//
-//            // Check for Duplicate | Email
-//            if (StringUtils.hasText(userRequest.getEmail()) && !user.getEmail().equals(userRequest.getEmail()))
-//                if (usersRepository.existsByEmail(userRequest.getEmail())) {
-//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                            APIResponse.ofError(String.format("User with email %s already exists",
-//                                    userRequest.getEmail())));
-//                }
-//
-//
-//            // Check for Duplicate | IDNumber
-//            if (!user.getIdNumber().equals(userRequest.getIdNumber()))
-//                if (usersRepository.existsByIdNumber(userRequest.getIdNumber())) {
-//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                            APIResponse.ofError(String.format("User with IDNumber %s already exists",
-//                                    userRequest.getIdNumber())));
-//                }
-//
-//            // check Branch Exist
-//            Branches branches = null;
-//            if (StringUtils.hasText(userRequest.getBranchCode())) {
-//                Optional<Branches> optionalBranches = branchesRepository.findById(userRequest.getBranchCode());
-//                if (!optionalBranches.isPresent()) {
-//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                            APIResponse.ofError(String.format("Branch with branchCode %s could not be found",
-//                                    userRequest.getBranchCode())));
-//
-//                }
-//
-//                branches = optionalBranches.get();
-//            }
-//
-//            // check department Exist
-//            Departments departments = null;
-//            if (StringUtils.hasText(userRequest.getDeptCode())) {
-//                Optional<Departments> optionalDepartments = departmentsRepository.findById(userRequest.getDeptCode());
-//                if (!optionalDepartments.isPresent()) {
-//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-//                            APIResponse.ofError(String.format("Department with deptCode %s could not be found",
-//                                    userRequest.getDeptCode())));
-//
-//                }
-//
-//                departments = optionalDepartments.get();
-//            }
-//
-//            // save
-//            Users usr = usersRepository.save(Users.ofUpdate(user, userRequest, departments, branches));
-//
-//            // update userGroup
-//            updateUserGroups(usr.getUserId(), userRequest.getUserGroups().stream().map(UserGroup::getGroupCode).collect(Collectors.toSet()));
-//
-//            return ResponseEntity.ok(APIResponse.ofSuccess());
-//        } catch (Exception e) {
-//            log.error("Error : {}", e.getMessage());
-//
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(APIResponse.ofInternalServerError());
-//
-//        }
+        try {
 
-        return ResponseEntity.ok(APIResponse.ofSuccess());
+            Optional<Farmers> farmers = farmerRepository.findById(farmerId);
+
+            if (!farmers.isPresent()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                        APIResponse.ofError(String.format("Could not find Farmer record with id %s ",
+                                farmerId)));
+            }
+
+            Farmers farmer = farmers.get();
+
+
+            // Format PhoneNo
+            if (StringUtils.hasText(updateRequest.getPrimaryPhone())) {
+                String phoneNo = PhoneNumberUtil.getFormattedPhoneNumber(updateRequest.getPrimaryPhone());
+                updateRequest.setPrimaryPhone(phoneNo);
+
+                // Check for Duplicate | PhoneNo
+                if (!farmer.getPrimaryPhone().equals(updateRequest.getPrimaryPhone()))
+                    if (farmerRepository.existsByPrimaryPhone(updateRequest.getPrimaryPhone())) {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                                APIResponse.ofError(String.format("Another Farmer with primaryPhoneNo %s already exists",
+                                        updateRequest.getPrimaryPhone())));
+                    }
+            }
+
+            // Check for Duplicate | NationalId
+            if (StringUtils.hasText(updateRequest.getNationalId()) && !farmer.getNationalId().equals(updateRequest.getNationalId())) {
+                if (farmerRepository.existsByNationalId(updateRequest.getNationalId())) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                            APIResponse.ofError(String.format("Another Farmer with NationalId %s already exists",
+                                    updateRequest.getNationalId())));
+                }
+            }
+
+            // check Region Exist
+            Region region = null;
+            if (StringUtils.hasText(updateRequest.getRegionCode())) {
+                Optional<Region> optionalRegion = regionRepository.findById(updateRequest.getRegionCode());
+
+                if (!optionalRegion.isPresent()) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                            APIResponse.ofError(String.format("Region with code %s could not be found",
+                                    updateRequest.getRegionCode())));
+
+                }
+
+                region = optionalRegion.get();
+            }
+
+
+            // Update
+            farmerRepository.save(Farmers.ofUpdate(farmer, updateRequest, region));
+
+            return ResponseEntity.ok(APIResponse.ofSuccess());
+        } catch (Exception e) {
+            log.error("Error : {}", e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(APIResponse.ofInternalServerError());
+
+        }
+
+
     }
 
 
@@ -229,21 +208,18 @@ public class FarmerServiceImpl implements FarmerService {
 
     @Override
     public ResponseEntity<APIResponse> addFarm(Long farmerId, FarmRequest farmRequest) {
-        ResponseEntity<APIResponse> response = null;
+
 
         // Grower
         Optional<Farmers> optionalFarmers = farmerRepository.findById(farmerId);
 
         if (!optionalFarmers.isPresent()) {
-            response = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    APIResponse.ofError(String.format("Farmer with farmerId %s already exists",
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    APIResponse.ofError(String.format("Farmer with farmerId %s does not exist",
                             farmerId)));
-        } else {
-            response = farmService.addFarm(optionalFarmers.get(), farmRequest);
         }
+        return farmService.addFarm(optionalFarmers.get(), null, farmRequest);
 
-
-        return response;
     }
 
     @Override

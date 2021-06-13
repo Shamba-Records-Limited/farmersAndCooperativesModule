@@ -17,6 +17,8 @@ public interface FarmRepository extends JpaRepository<Farm, Long> {
 
     List<FarmData> findByFarmer_Code(String growerCode);
 
+    List<FarmData> findByCooperatives_Code(String code);
+
 
 
 
